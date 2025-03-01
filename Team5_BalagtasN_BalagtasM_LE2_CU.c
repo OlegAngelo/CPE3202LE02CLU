@@ -26,7 +26,9 @@ int CU(void)
 
     while (1)
     {
-        printf("\n*****************************\n");
+        printf("****************************\n");
+        printf("PC : 0x%03X\n", PC);
+        
         // Fetch instruction
         IR = dataMemory[PC] << 8; // get upper byte from memory pointed to by PC & move the byte to the correct position
         PC++;                     // point to the address of the lower byte
@@ -37,7 +39,6 @@ int CU(void)
         uint8_t inst_code = IR >> 11;   // get 5-bit instruction code
         uint16_t operand = IR & 0x07FF; // get 11-bit operand
 
-        printf("PC: 0x%03X\n", PC);
         printf("Fetching instruction...\n");
 
         printf("IR: 0x%04X\n", IR);
