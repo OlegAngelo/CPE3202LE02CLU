@@ -26,22 +26,21 @@ int CU(void)
 
     while (1)
     {
-        printf("****************************\n");
-        printf("PC : 0x%03X\n", PC);
-        
+        printf("\n*****************************\n");
+        printf("PC: 0x%03X\n", PC);
+        printf("Fetching instruction...\n");
+
         // Fetch instruction
         IR = dataMemory[PC] << 8; // get upper byte from memory pointed to by PC & move the byte to the correct position
         PC++;                     // point to the address of the lower byte
         IR |= dataMemory[PC];     // get lower byte from memory pointed to by PC
         PC++;                     // points to the next instruction
 
+        printf("IR: 0x%04X\n", IR);
+
         // Decode instruction
         uint8_t inst_code = IR >> 11;   // get 5-bit instruction code
         uint16_t operand = IR & 0x07FF; // get 11-bit operand
-
-        printf("Fetching instruction...\n");
-
-        printf("IR: 0x%04X\n", IR);
 
         printf("Instruction Code: 0x%02X\n", inst_code);
         printf("Operand: 0x%03X\n", operand);
@@ -50,21 +49,21 @@ int CU(void)
         switch (inst_code)
         {
         case 0x06: // WB - Write data to MBR
-            printf("Instruction : WB\n");
+            printf("Instruction: WB\n");
             printf("Loading data to MBR...\n");
             MBR = operand & 0xFF;
             printf("MBR : 0x%02X\n", MBR);
             break;
 
         case 0x01: // WM - Write to Memory
-            printf("Instruction : WM\n");
+            printf("Instruction: WM\n");
             printf("Writing data to memory...\n");
             MAR = operand;
             dataMemory[MAR] = MBR;
             break;
 
         case 0x02: // RM - Read from Memory
-            printf("Instruction : RM\n");
+            printf("Instruction: RM\n");
             printf("Reading data from memory...\n");
             MAR = operand;
             MBR = dataMemory[MAR];
@@ -72,20 +71,20 @@ int CU(void)
             break;
 
         case 0x03: // BR - Branch
-            printf("Instruction : BR\n");
+            printf("Instruction: BR\n");
             printf("Branch to 0x%03X on next cycle.\n", operand);
             PC = operand;
-            continue; // Prevents incrementing PC after BR
+            break;
 
         case 0x07: // WIB - Write data to IOBR
-            printf("Instruction : WIB\n");
+            printf("Instruction: WIB\n");
             printf("Loading data to IOBR...\n");
             IOBR = operand & 0xFF;
             printf("IOBR : 0x%02X\n", IOBR);
             break;
 
         case 0x05: // WIO - Write to I/O Buffer
-            printf("Instruction : WIO\n");
+            printf("Instruction: WIO\n");
             printf("Writing to IO buffer...\n");
             IOAR = operand;
             ioBuffer[IOAR] = IOBR;
